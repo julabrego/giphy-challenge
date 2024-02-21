@@ -38,6 +38,10 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        return response('success', 200);
+        if (!auth()->attempt($loginData)) {
+            return response(['message' => 'Invalid credentials'], 401);
+        }
+
+        return response(['user' => auth()->user()]);
     }
 }

@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AuthLoginTest extends TestCase
 {
+    use DatabaseTransactions;
 
     public function test_login_route_exists(): void
     {
@@ -22,7 +25,29 @@ class AuthLoginTest extends TestCase
 
     public function test_login_accepts_valid_data(): void
     {
-        $this->login($this->validLoginData)->assertStatus(200);
+        $statusCode = $this->login($this->validLoginData)->getStatusCode();
+        $this->assertNotEquals(302, $statusCode);
+    }
+
+    public function test_login_should_return_status_401_when_user_is_not_found(): void
+    {
+        $this->login($this->validLoginData)->assertStatus(401);
+    }
+
+    public function test_login_should_return_a_user_when_it_logs_in(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'A test user',
+            'email' => $this->validLoginData['email'],
+            'password' => bcrypt($this->validLoginData['password']),
+        ]);
+
+        $this->login($this->validLoginData)->assertJson([
+            'user' => [
+                'name' => $user->name,
+                'email' => $user->email,
+            ]
+        ]);
     }
 
 
