@@ -17,21 +17,21 @@ class AuthTest extends TestCase
 
     public function test_register_rejects_invalid_data(): void
     {
-        $this->post(route('register'))->assertStatus(302);
+        $this->registerUser([])->assertStatus(302);
 
         foreach ($this->notValidRegisterData as $notValidData) {
-            $this->post(route('register'), $notValidData)->assertStatus(302);
+            $this->registerUser($notValidData)->assertStatus(302);
         }
     }
 
     public function test_register_accepts_valid_data(): void
     {
-        $this->post(route('register'), $this->validRegisterData)->assertStatus(200);
+        $this->registerUser($this->validRegisterData)->assertStatus(200);
     }
 
     public function test_register_should_create_and_return_a_user(): void
     {
-        $response = $this->registerAValidUser();
+        $response = $this->registerUser($this->validRegisterData);
 
         $response->assertStatus(200)
             ->assertJson([
@@ -42,9 +42,9 @@ class AuthTest extends TestCase
             ]);
     }
 
-    public function test_register_should_reeturn_a_token(): void
+    public function test_register_should_return_a_token(): void
     {
-        $response = $this->registerAValidUser();
+        $response = $this->registerUser($this->validRegisterData);
 
         $response->assertStatus(200)
             ->assertJson([
@@ -54,7 +54,7 @@ class AuthTest extends TestCase
 
     public function test_access_token_should_expire_in_30_minutes(): void
     {
-        $response = $this->registerAValidUser();
+        $response = $this->registerUser($this->validRegisterData);
 
         $response->assertStatus(200)
             ->assertJson(['expires_in' => 29]);
@@ -84,8 +84,8 @@ class AuthTest extends TestCase
         'password' => 'password1234',
     ];
 
-    private function registerAValidUser()
+    private function registerUser($userData)
     {
-        return $this->post(route('register'), $this->validRegisterData);
+        return $this->post(route('register'), $userData);
     }
 }
