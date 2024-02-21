@@ -30,4 +30,14 @@ class AuthController extends Controller
 
         return response(['user' => $user, 'access_token' => $accessToken, 'expires_in' => $expiresIn]);
     }
+
+    public function login(Request $request)
+    {
+        $loginData = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        return response('success', 200);
+    }
 }
