@@ -77,4 +77,17 @@ class AuthTest extends TestCase
                 'access_token' => true
             ]);
     }
+
+    public function test_access_token_should_expire_in_30_minutes(): void
+    {
+        $response = $this->post(route('register'), [
+            'name' => 'Test name',
+            'email' => 'my@email.com',
+            'password' => 'password1234',
+        ]);
+
+        var_dump($response['access_token']);
+        $response->assertStatus(200)
+            ->assertJson(['expires_in' => 29]);
+    }
 }

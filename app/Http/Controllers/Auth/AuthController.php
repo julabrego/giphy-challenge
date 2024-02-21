@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -22,8 +23,11 @@ class AuthController extends Controller
         $user = User::create($validatedData);
         $user->save();
 
-        $accessToken = $user->createToken('authToken')->accessToken;
+        $tokenObject = $user->createToken('authToken');
+        $accessToken = $tokenObject->accessToken;
 
-        return response(['user' => $user, 'access_token' => $accessToken]);
+        $expiresIn = $tokenObject->token->expires_at->diffInMinutes(Carbon::now());
+
+        return response(['user' => $user, 'access_token' => $accessToken, 'expires_in' => $expiresIn]);
     }
 }
