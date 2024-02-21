@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class AuthTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function test_register_route_exists(): void
     {
@@ -62,6 +61,20 @@ class AuthTest extends TestCase
                     'name' => 'Test name',
                     'email' => 'my@email.com',
                 ]
+            ]);
+    }
+
+    public function test_register_should_reeturn_a_token(): void
+    {
+        $response = $this->post(route('register'), [
+            'name' => 'Test name',
+            'email' => 'my@email.com',
+            'password' => 'password1234',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'access_token' => true
             ]);
     }
 }

@@ -22,6 +22,8 @@ class AuthController extends Controller
         $user = User::create($validatedData);
         $user->save();
 
-        return response(['user' => $user]);
+        $accessToken = $user->createToken('authToken')->accessToken;
+
+        return response(['user' => $user, 'access_token' => $accessToken]);
     }
 }
