@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class AuthTest extends TestCase
+class AuthRegisterTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -17,8 +17,6 @@ class AuthTest extends TestCase
 
     public function test_register_rejects_invalid_data(): void
     {
-        $this->registerUser([])->assertStatus(302);
-
         foreach ($this->notValidRegisterData as $notValidData) {
             $this->registerUser($notValidData)->assertStatus(302);
         }
@@ -61,6 +59,7 @@ class AuthTest extends TestCase
     }
 
     private $notValidRegisterData = [
+        [],
         [
             'name' => '',
             'email' => '',
