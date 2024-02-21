@@ -47,4 +47,21 @@ class AuthTest extends TestCase
             'password' => 'password1234',
         ])->assertStatus(200);
     }
+
+    public function test_register_should_create_and_return_a_user(): void
+    {
+        $response = $this->post(route('register'), [
+            'name' => 'Test name',
+            'email' => 'my@email.com',
+            'password' => 'password1234',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'user' => [
+                    'name' => 'Test name',
+                    'email' => 'my@email.com',
+                ]
+            ]);
+    }
 }

@@ -17,8 +17,11 @@ class AuthController extends Controller
             'password' => ['required', 'string', 'min:8'],
         ]);
 
-        return response([
-            'status' => 'success',
-        ]);
+        $validatedData['password'] = bcrypt($request->password);
+
+        $user = User::create($validatedData);
+        $user->save();
+
+        return response(['user' => $user]);
     }
 }
