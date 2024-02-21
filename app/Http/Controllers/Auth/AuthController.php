@@ -23,12 +23,7 @@ class AuthController extends Controller
         $user = User::create($validatedData);
         $user->save();
 
-        $tokenObject = $user->createToken('authToken');
-        $accessToken = $tokenObject->accessToken;
-
-        $expiresIn = $tokenObject->token->expires_at->diffInMinutes(Carbon::now());
-
-        return response(['user' => $user, 'access_token' => ['token' => $accessToken, 'expires_in' => $expiresIn]]);
+        return response($this->getAuthenticatedUserResponse($user));
     }
 
     public function login(Request $request)
@@ -42,13 +37,15 @@ class AuthController extends Controller
             return response(['message' => 'Invalid credentials'], 401);
         }
 
-        $user = auth()->user();
+        return response($this->getAuthenticatedUserResponse(auth()->user()));
+    }
 
+    private function getAuthenticatedUserResponse($user)
+    {
         $tokenObject = $user->createToken('authToken');
         $accessToken = $tokenObject->accessToken;
-
         $expiresIn = $tokenObject->token->expires_at->diffInMinutes(Carbon::now());
 
-        return response(['user' => $user, 'access_token' => ['token' => $accessToken, 'expires_in' => $expiresIn]]);
+        return ['user' => $user, 'access_token' => ['token' => $accessToken, 'expires_in' => $expiresIn]];
     }
 }
