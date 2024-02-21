@@ -15,4 +15,36 @@ class AuthTest extends TestCase
     {
         $this->assertNotNull(route('register'));
     }
+
+    public function test_register_rejects_invalid_data(): void
+    {
+        $this->post(route('register'))->assertStatus(302);
+
+        $this->post(route('register'), [
+            'name' => '',
+            'email' => '',
+            'password' => '',
+        ])->assertStatus(302);
+
+        $this->post(route('register'), [
+            'name' => 'Test name',
+            'email' => 'not.an.email',
+            'password' => 'password1234',
+        ])->assertStatus(302);
+
+        $this->post(route('register'), [
+            'name' => 'Test name',
+            'email' => 'my@email.com',
+            'password' => 'short',
+        ])->assertStatus(302);
+    }
+
+    public function test_register_accepts_valid_data(): void
+    {
+        $this->post(route('register'), [
+            'name' => 'Test name',
+            'email' => 'my@email.com',
+            'password' => 'password1234',
+        ])->assertStatus(200);
+    }
 }
