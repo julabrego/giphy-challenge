@@ -19,58 +19,32 @@ class AuthTest extends TestCase
     {
         $this->post(route('register'))->assertStatus(302);
 
-        $this->post(route('register'), [
-            'name' => '',
-            'email' => '',
-            'password' => '',
-        ])->assertStatus(302);
-
-        $this->post(route('register'), [
-            'name' => 'Test name',
-            'email' => 'not.an.email',
-            'password' => 'password1234',
-        ])->assertStatus(302);
-
-        $this->post(route('register'), [
-            'name' => 'Test name',
-            'email' => 'my@email.com',
-            'password' => 'short',
-        ])->assertStatus(302);
+        foreach ($this->notValidRegisterData as $notValidData) {
+            $this->post(route('register'), $notValidData)->assertStatus(302);
+        }
     }
 
     public function test_register_accepts_valid_data(): void
     {
-        $this->post(route('register'), [
-            'name' => 'Test name',
-            'email' => 'my@email.com',
-            'password' => 'password1234',
-        ])->assertStatus(200);
+        $this->post(route('register'), $this->validRegisterData)->assertStatus(200);
     }
 
     public function test_register_should_create_and_return_a_user(): void
     {
-        $response = $this->post(route('register'), [
-            'name' => 'Test name',
-            'email' => 'my@email.com',
-            'password' => 'password1234',
-        ]);
+        $response = $this->registerAValidUser();
 
         $response->assertStatus(200)
             ->assertJson([
                 'user' => [
-                    'name' => 'Test name',
-                    'email' => 'my@email.com',
+                    'name' => $this->validRegisterData['name'],
+                    'email' => $this->validRegisterData['email'],
                 ]
             ]);
     }
 
     public function test_register_should_reeturn_a_token(): void
     {
-        $response = $this->post(route('register'), [
-            'name' => 'Test name',
-            'email' => 'my@email.com',
-            'password' => 'password1234',
-        ]);
+        $response = $this->registerAValidUser();
 
         $response->assertStatus(200)
             ->assertJson([
@@ -80,14 +54,38 @@ class AuthTest extends TestCase
 
     public function test_access_token_should_expire_in_30_minutes(): void
     {
-        $response = $this->post(route('register'), [
-            'name' => 'Test name',
-            'email' => 'my@email.com',
-            'password' => 'password1234',
-        ]);
+        $response = $this->registerAValidUser();
 
-        var_dump($response['access_token']);
         $response->assertStatus(200)
             ->assertJson(['expires_in' => 29]);
+    }
+
+    private $notValidRegisterData = [
+        [
+            'name' => '',
+            'email' => '',
+            'password' => '',
+        ],
+        [
+            'name' => 'Test name',
+            'email' => 'not.an.email',
+            'password' => 'password1234',
+        ],
+        [
+            'name' => 'Test name',
+            'email' => 'my@email.com',
+            'password' => 'short',
+        ]
+    ];
+
+    private $validRegisterData = [
+        'name' => 'Test name',
+        'email' => 'my@email.com',
+        'password' => 'password1234',
+    ];
+
+    private function registerAValidUser()
+    {
+        return $this->post(route('register'), $this->validRegisterData);
     }
 }
