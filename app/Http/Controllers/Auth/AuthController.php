@@ -42,6 +42,13 @@ class AuthController extends Controller
             return response(['message' => 'Invalid credentials'], 401);
         }
 
-        return response(['user' => auth()->user()]);
+        $user = auth()->user();
+
+        $tokenObject = $user->createToken('authToken');
+        $accessToken = $tokenObject->accessToken;
+
+        $expiresIn = $tokenObject->token->expires_at->diffInMinutes(Carbon::now());
+
+        return response(['user' => $user, 'access_token' => $accessToken, 'expires_in' => $expiresIn]);
     }
 }

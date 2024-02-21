@@ -50,6 +50,32 @@ class AuthLoginTest extends TestCase
         ]);
     }
 
+    public function test_user_login_should_return_an_access_token(): void
+    {
+        User::factory()->create([
+            'name' => 'A test user',
+            'email' => $this->validLoginData['email'],
+            'password' => bcrypt($this->validLoginData['password']),
+        ]);
+
+        $this->login($this->validLoginData)->assertJson([
+            'access_token' => true
+        ]);
+    }
+
+    public function test_access_token_should_expire_in_30_minutes(): void
+    {
+        User::factory()->create([
+            'name' => 'A test user',
+            'email' => $this->validLoginData['email'],
+            'password' => bcrypt($this->validLoginData['password']),
+        ]);
+
+        $response = $this->login($this->validLoginData);
+
+        $response->assertStatus(200)
+            ->assertJson(['expires_in' => 29]);
+    }
 
     private $notValidLoginData = [
         [],
