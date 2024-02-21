@@ -46,7 +46,7 @@ class AuthRegisterTest extends TestCase
 
         $response->assertStatus(200)
             ->assertJson([
-                'access_token' => true
+                'access_token' => ['token' => true]
             ]);
     }
 
@@ -55,7 +55,7 @@ class AuthRegisterTest extends TestCase
         $response = $this->registerUser($this->validRegisterData);
 
         $response->assertStatus(200)
-            ->assertJson(['expires_in' => 29]);
+            ->assertJson(['access_token' => ['expires_in' => 29]]);
     }
 
     private $notValidRegisterData = [

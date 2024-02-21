@@ -28,7 +28,7 @@ class AuthController extends Controller
 
         $expiresIn = $tokenObject->token->expires_at->diffInMinutes(Carbon::now());
 
-        return response(['user' => $user, 'access_token' => $accessToken, 'expires_in' => $expiresIn]);
+        return response(['user' => $user, 'access_token' => ['token' => $accessToken, 'expires_in' => $expiresIn]]);
     }
 
     public function login(Request $request)
@@ -49,6 +49,6 @@ class AuthController extends Controller
 
         $expiresIn = $tokenObject->token->expires_at->diffInMinutes(Carbon::now());
 
-        return response(['user' => $user, 'access_token' => $accessToken, 'expires_in' => $expiresIn]);
+        return response(['user' => $user, 'access_token' => ['token' => $accessToken, 'expires_in' => $expiresIn]]);
     }
 }

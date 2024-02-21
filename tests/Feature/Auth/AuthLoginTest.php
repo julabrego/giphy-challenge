@@ -36,11 +36,7 @@ class AuthLoginTest extends TestCase
 
     public function test_login_should_return_a_user_when_it_logs_in(): void
     {
-        $user = User::factory()->create([
-            'name' => 'A test user',
-            'email' => $this->validLoginData['email'],
-            'password' => bcrypt($this->validLoginData['password']),
-        ]);
+        $user = $this->createTestUser();
 
         $this->login($this->validLoginData)->assertJson([
             'user' => [
@@ -52,29 +48,19 @@ class AuthLoginTest extends TestCase
 
     public function test_user_login_should_return_an_access_token(): void
     {
-        User::factory()->create([
-            'name' => 'A test user',
-            'email' => $this->validLoginData['email'],
-            'password' => bcrypt($this->validLoginData['password']),
-        ]);
+        $this->createTestUser();
 
         $this->login($this->validLoginData)->assertJson([
-            'access_token' => true
+            'access_token' => ['token' => true]
         ]);
     }
 
     public function test_access_token_should_expire_in_30_minutes(): void
     {
-        User::factory()->create([
-            'name' => 'A test user',
-            'email' => $this->validLoginData['email'],
-            'password' => bcrypt($this->validLoginData['password']),
-        ]);
+        $this->createTestUser();
 
-        $response = $this->login($this->validLoginData);
-
-        $response->assertStatus(200)
-            ->assertJson(['expires_in' => 29]);
+        $this->login($this->validLoginData)->assertStatus(200)
+            ->assertJson(['access_token' => ['expires_in' => 29]]);
     }
 
     private $notValidLoginData = [
@@ -101,5 +87,14 @@ class AuthLoginTest extends TestCase
     private function login($userData)
     {
         return $this->post(route('login'), $userData);
+    }
+
+    private function createTestUser()
+    {
+        return User::factory()->create([
+            'name' => 'A test user',
+            'email' => $this->validLoginData['email'],
+            'password' => bcrypt($this->validLoginData['password']),
+        ]);
     }
 }
