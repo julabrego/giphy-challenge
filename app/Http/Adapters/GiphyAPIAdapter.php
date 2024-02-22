@@ -17,8 +17,6 @@ class GiphyAPIAdapter implements GiphyAPIAdapterInterface
 
     public function search(string $q, ?int $limit = null, ?int $offset = null)
     {
-
-
         return $this->adaptSearchResponse($this->giphyAPIService->search($q, $limit, $offset));
     }
 
