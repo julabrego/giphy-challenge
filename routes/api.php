@@ -22,4 +22,5 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::prefix('gifs')->group(function () {
     Route::get('/search', [GiphyAPIController::class, 'search'])->name('search');
+    Route::get('/search/{id}', [GiphyAPIController::class, 'searchById'])->name('searchById');
 });

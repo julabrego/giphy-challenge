@@ -55,6 +55,18 @@ class GiphyAPIAdapterTest extends TestCase
         $this->assertContainsOnlyInstancesOf(GifDTO::class, $response);
     }
 
+    public function test_adapter_should_adapt_the_response_of_the_search_by_id_method(): void
+    {
+        $id = '1234';
+
+        $this->mockHTTPGiphySearchByIdRequest($id);
+
+        $response = $this->giphyAPIAdapter->searchById($id);
+
+        $this->assertInstanceOf(GifDTO::class, $response);
+    }
+
+
     private function getExampleAPIResponse()
     {
         $fileContents = file_get_contents(base_path() . '/tests/Feature/MockAPIResponses/GiphyAPIResponse.json');
@@ -68,6 +80,15 @@ class GiphyAPIAdapterTest extends TestCase
 
         Http::fake([
             $target => Http::response($this->getExampleAPIResponse(), 200)
+        ]);
+    }
+
+    private function mockHTTPGiphySearchByIdRequest($id): void
+    {
+        $target = "https://api.giphy.com/v1/gifs/{$id}?*";
+
+        Http::fake([
+            $target => Http::response(['data' => $this->getExampleAPIResponse()['data'][0]], 200)
         ]);
     }
 }

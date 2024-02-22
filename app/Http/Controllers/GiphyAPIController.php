@@ -20,4 +20,11 @@ class GiphyAPIController extends Controller
 
         return $response;
     }
+
+    public function searchById(string $id)
+    {
+        $response = $this->giphyAPIAdapter->searchById($id);
+
+        return $response;
+    }
 }

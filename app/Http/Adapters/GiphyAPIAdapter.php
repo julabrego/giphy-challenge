@@ -20,6 +20,11 @@ class GiphyAPIAdapter implements GiphyAPIAdapterInterface
         return $this->adaptSearchResponse($this->giphyAPIService->search($q, $limit, $offset));
     }
 
+    public function searchById(string $id)
+    {
+        return $this->adapt($this->giphyAPIService->searchById($id)['data']);
+    }
+
     protected function adaptSearchResponse(array $apiResponse): array
     {
         $adaptee = [];
