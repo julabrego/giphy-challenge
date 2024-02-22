@@ -6,6 +6,8 @@ use App\DTOs\GifDTO;
 use App\Http\Services\GiphyAPIService;
 use App\Http\Adapters\GiphyAPIAdapterInterface;
 
+use function PHPUnit\Framework\isEmpty;
+
 class GiphyAPIAdapter implements GiphyAPIAdapterInterface
 {
     protected $giphyAPIService;
@@ -22,7 +24,13 @@ class GiphyAPIAdapter implements GiphyAPIAdapterInterface
 
     public function searchById(string $id)
     {
-        return $this->adapt($this->giphyAPIService->searchById($id)['data']);
+        $result = $this->giphyAPIService->searchById($id);
+
+        if (empty($result['data'])) {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+
+        return $this->adapt($result['data']);
     }
 
     protected function adaptSearchResponse(array $apiResponse): array
