@@ -14,7 +14,6 @@ class GiphyAPIServiceTest extends TestCase
 
     public function test_request_should_send_a_request_to_the_giphy_api_passing_the_correct_parameters(): void
     {
-
         $apiKey = 'testKey123';
 
         $exampleParameters = [
@@ -33,32 +32,38 @@ class GiphyAPIServiceTest extends TestCase
             ],
         ];
 
-
-        $this->giphyAPIService = new GiphyAPIService($apiKey);
-
         $expectedResponse = [
             'data' => ['fake_response' => true]
         ];
 
+        $this->giphyAPIService = new GiphyAPIService($apiKey);
+
         foreach ($exampleParameters as $parameters) {
-            $queryString = http_build_query($parameters);
+            $this->mockHTTPGiphySearchRequest($parameters, $apiKey, $expectedResponse);
 
-            $target = "https://api.giphy.com/v1/gifs/search?api_key={$apiKey}&" . $queryString;
-
-            var_dump($target);
-
-            Http::fake([
-                $target => Http::response($expectedResponse, 200)
-            ]);
-
-            $searchParams = ['q' => $parameters['q']];
-            if (isset($parameters['limit'])) $searchParams['limit'] = $parameters['limit'];
-
-            if (isset($parameters['offset']))  $searchParams['offset'] = $parameters['offset'];
-
-            $response = $this->giphyAPIService->search(...$searchParams);
+            $response = $this->giphyAPIService->search(...$this->generateSeachParams($parameters));
 
             $this->assertEquals($response, $expectedResponse);
         }
+    }
+
+    private function mockHTTPGiphySearchRequest($input, $apiKey, $expectedResponse): void
+    {
+        $queryString = http_build_query($input);
+
+        $target = "https://api.giphy.com/v1/gifs/search?api_key={$apiKey}&" . $queryString;
+
+        Http::fake([
+            $target => Http::response($expectedResponse, 200)
+        ]);
+    }
+
+    private function generateSeachParams($parameters)
+    {
+        $searchParams = ['q' => $parameters['q']];
+        if (isset($parameters['limit'])) $searchParams['limit'] = $parameters['limit'];
+        if (isset($parameters['offset']))  $searchParams['offset'] = $parameters['offset'];
+
+        return $searchParams;
     }
 }
