@@ -16,9 +16,23 @@ class GiphyAPIServiceTest extends TestCase
     {
 
         $apiKey = 'testKey123';
-        $query = 'example query';
-        $limit = 10;
-        $offset = 0;
+
+        $exampleParameters = [
+            [
+                'q' => 'example query 1',
+                'limit' => 15,
+                'offset' => 0,
+            ],
+            [
+                'q' => 'example query 2',
+                'limit' => 10,
+                'offset' => 10,
+            ],
+            [
+                'q' => 'example query 3',
+            ],
+        ];
+
 
         $this->giphyAPIService = new GiphyAPIService($apiKey);
 
@@ -26,14 +40,25 @@ class GiphyAPIServiceTest extends TestCase
             'data' => ['fake_response' => true]
         ];
 
-        $target = urlencode("https://api.giphy.com/v1/gifs/search?q={$query}&api_key={$apiKey}&limit={$limit}&offset={$offset}");
+        foreach ($exampleParameters as $parameters) {
+            $queryString = http_build_query($parameters);
 
-        Http::fake([
-            $target => Http::response($expectedResponse, 200)
-        ]);
+            $target = "https://api.giphy.com/v1/gifs/search?api_key={$apiKey}&" . $queryString;
 
-        $response = $this->giphyAPIService->search($query, $limit, $offset);
+            var_dump($target);
 
-        $this->assertEquals($expectedResponse, $response);
+            Http::fake([
+                $target => Http::response($expectedResponse, 200)
+            ]);
+
+            $searchParams = ['q' => $parameters['q']];
+            if (isset($parameters['limit'])) $searchParams['limit'] = $parameters['limit'];
+
+            if (isset($parameters['offset']))  $searchParams['offset'] = $parameters['offset'];
+
+            $response = $this->giphyAPIService->search(...$searchParams);
+
+            $this->assertEquals($response, $expectedResponse);
+        }
     }
 }

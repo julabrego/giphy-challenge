@@ -16,12 +16,13 @@ class GiphyAPIService
         $this->apiKey = $apiKey;
     }
 
-    public function search(string $query, int $limit = 10, int $offset = 0)
+    public function search(string $q, ?int $limit = null, ?int $offset = null)
     {
-        $queryString = "search?q={$query}&api_key={$this->apiKey}&limit={$limit}&offset={$offset}";
+        $queryParams = http_build_query(['q' => $q, 'limit' => $limit, 'offset' => $offset]);
+        $queryString = "search?api_key={$this->apiKey}&{$queryParams}";
 
         $target = $this->baseUrl . $queryString;
-        $response = Http::get(urlencode($target));
+        $response = Http::get($target);
 
         return $response->json();
     }
