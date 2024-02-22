@@ -6,8 +6,6 @@ use App\DTOs\GifDTO;
 use App\Http\Services\GiphyAPIService;
 use App\Http\Adapters\GiphyAPIAdapterInterface;
 
-use function PHPUnit\Framework\isEmpty;
-
 class GiphyAPIAdapter implements GiphyAPIAdapterInterface
 {
     protected $giphyAPIService;
@@ -24,13 +22,17 @@ class GiphyAPIAdapter implements GiphyAPIAdapterInterface
 
     public function searchById(string $id)
     {
-        $result = $this->giphyAPIService->searchById($id);
+        try {
+            $result = $this->giphyAPIService->searchById($id);
 
-        if (empty($result['data'])) {
-            return response()->json(['message' => 'Not Found'], 404);
+            if (empty($result['data'])) {
+                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('GIF not found.', 404);
+            }
+
+            return $this->adapt($result['data']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
         }
-
-        return $this->adapt($result['data']);
     }
 
     protected function adaptSearchResponse(array $apiResponse): array
@@ -47,7 +49,7 @@ class GiphyAPIAdapter implements GiphyAPIAdapterInterface
     protected function adapt(array $data): GifDTO
     {
         if (!isset($data['id'], $data['url'], $data['title'])) {
-            throw new \InvalidArgumentException('The provided data is invalid.');
+            throw new \InvalidArgumentException('The provided data is invalid.', 400);
         }
 
         return new GifDTO([
