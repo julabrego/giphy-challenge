@@ -4,8 +4,9 @@ namespace App\Http\Adapters;
 
 use App\DTOs\GifDTO;
 use App\Http\Services\GiphyAPIService;
+use App\Http\Adapters\GiphyAPIAdapterInterface;
 
-class GiphyAPIAdapter extends GiphyAPIService
+class GiphyAPIAdapter implements GiphyAPIAdapterInterface
 {
     protected $giphyAPIService;
     public function __construct(
@@ -14,9 +15,25 @@ class GiphyAPIAdapter extends GiphyAPIService
         $this->giphyAPIService = $giphyAPIService;
     }
 
-    // TODO: implement search adaptation
+    public function search(string $q, ?int $limit = null, ?int $offset = null)
+    {
 
-    public function adapt(array $data): GifDTO
+
+        return $this->adaptSearchResponse($this->giphyAPIService->search($q, $limit, $offset));
+    }
+
+    protected function adaptSearchResponse(array $apiResponse): array
+    {
+        $adaptee = [];
+
+        foreach ($apiResponse['data'] as $gif) {
+            $adaptee[] = $this->adapt($gif);
+        }
+
+        return $adaptee;
+    }
+
+    protected function adapt(array $data): GifDTO
     {
         if (!isset($data['id'], $data['url'], $data['title'])) {
             throw new \InvalidArgumentException('The provided data is invalid.');
