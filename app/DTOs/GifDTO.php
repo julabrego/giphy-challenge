@@ -2,7 +2,9 @@
 
 namespace App\DTOs;
 
-class GifDTO
+use JsonSerializable;
+
+class GifDTO implements JsonSerializable
 {
     private $id;
     private $url;
@@ -13,5 +15,14 @@ class GifDTO
         $this->id = $data['id'];
         $this->url = $data['url'];
         $this->title = $data['title'];
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'url' => $this->url,
+            'title' => $this->title,
+        ];
     }
 }
