@@ -34,6 +34,12 @@ class GiphyAPIAdapterTest extends TestCase
         $this->assertEquals($response, $expectedResponse);
     }
 
+    public function test_adapter_should_throw_exception_when_giphy_api_response_is_invalid(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->giphyAPIAdapter->adapt([]);
+    }
+
     private function getExampleAPIResponse()
     {
         $fileContents = file_get_contents(base_path() . '/tests/Feature/MockAPIResponses/GiphyAPIResponse.json');
