@@ -29,7 +29,10 @@ class GiphyAPIService implements GiphyApiAdapterInterface
 
     public function searchById(int $id)
     {
-        return response('Not implemented');
+        $target = $this->baseUrl . "{$id}?api_key={$this->apiKey}";
+        $response = Http::get($target);
+
+        return $response->json();
     }
 
     public function save(int $id, string $alias, int $userId)
