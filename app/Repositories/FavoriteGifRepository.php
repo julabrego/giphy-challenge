@@ -2,12 +2,22 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
+use App\Models\FavoriteGif;
 
 class FavoriteGifRepository
 {
-    public function create(int $id, string $alias, int $userId)
+    protected $favoriteGif;
+    public function __construct(FavoriteGif $favoriteGif)
     {
-        return response('Not implemented');
+        $this->favoriteGif = $favoriteGif;
+    }
+
+    public function create(int $gifId, string $alias, int $userId)
+    {
+        return $this->favoriteGif->create([
+            'gif_id' => $gifId,
+            'alias' => $alias,
+            'user_id' => $userId
+        ]);
     }
 }

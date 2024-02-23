@@ -9,7 +9,7 @@ class FavoriteGif extends Model
 {
     use HasFactory;
 
-    private $fillable = [
+    protected $fillable = [
         'gif_id',
         'alias',
         'user_id',
