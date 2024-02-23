@@ -16,6 +16,10 @@ class FavoriteGifService
 
     public function create(string $gifId, string $alias, int $userId): FavoriteGif
     {
+        if ($this->favoriteGifRepository->exists($gifId, $userId)) {
+            throw new \Exception('The user has already saved the gif');
+        }
+
         return $this->favoriteGifRepository->create($gifId, $alias, $userId);
     }
 }

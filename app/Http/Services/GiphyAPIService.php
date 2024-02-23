@@ -34,9 +34,4 @@ class GiphyAPIService implements GiphyApiAdapterInterface
 
         return $response->json();
     }
-
-    public function save(int $id, string $alias, int $userId)
-    {
-        return response('Not implemented');
-    }
 }

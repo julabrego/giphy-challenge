@@ -20,4 +20,14 @@ class FavoriteGifRepository
             'user_id' => $userId
         ]);
     }
+
+    public function exists(string $gifId, int $userId): bool
+    {
+        $query =  $this->favoriteGif->where([
+            'gif_id' => $gifId,
+            'user_id' => $userId
+        ]);
+
+        return $query ? $query->exists() : false;
+    }
 }

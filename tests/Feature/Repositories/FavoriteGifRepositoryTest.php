@@ -41,4 +41,54 @@ class FavoriteGifRepositoryTest extends TestCase
 
         $this->assertEquals($response, $expectedFavoriteGif);
     }
+
+    public function test_exists_method_should_return_true_if_the_favorite_gif_exists_in_the_database(): void
+    {
+        $favoriteGifAttributes = [
+            'id' => 1,
+            'gif_id' => 2,
+            'alias' => 'my favorite gif',
+            'user_id' => 3,
+        ];
+
+        $favoriteGifMock = Mockery::mock(FavoriteGif::class);
+
+        $favoriteGifMock->shouldReceive('where')->with([
+            'gif_id' => $favoriteGifAttributes['gif_id'],
+            'user_id' => $favoriteGifAttributes['user_id'],
+        ])->andReturn($favoriteGifMock);
+
+        $favoriteGifMock->shouldReceive('exists')->andReturn(true);
+
+        $this->favoriteGifRepository = new FavoriteGifRepository($favoriteGifMock);
+
+        $response = $this->favoriteGifRepository->exists($favoriteGifAttributes['gif_id'], $favoriteGifAttributes['user_id']);
+
+        $this->assertTrue($response);
+    }
+
+    public function test_exists_method_should_return_false_if_the_favorite_gif_doesnt_exist_in_the_database(): void
+    {
+        $favoriteGifAttributes = [
+            'id' => 1,
+            'gif_id' => 2,
+            'alias' => 'my favorite gif',
+            'user_id' => 3,
+        ];
+
+        $favoriteGifMock = Mockery::mock(FavoriteGif::class);
+
+        $favoriteGifMock->shouldReceive('where')->with([
+            'gif_id' => $favoriteGifAttributes['gif_id'],
+            'user_id' => $favoriteGifAttributes['user_id'],
+        ])->andReturn(null);
+
+        $favoriteGifMock->shouldReceive('exists')->andReturn(false);
+
+        $this->favoriteGifRepository = new FavoriteGifRepository($favoriteGifMock);
+
+        $response = $this->favoriteGifRepository->exists($favoriteGifAttributes['gif_id'], $favoriteGifAttributes['user_id']);
+
+        $this->assertFalse($response);
+    }
 }
