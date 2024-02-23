@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Http\Services\FavoriteGifService;
 use App\Repositories\FavoriteGifRepository;
+use App\Http\Services\GiphyAPIService;
 use Mockery;
 
 class FavoriteGifServiceTest extends TestCase
@@ -25,13 +26,15 @@ class FavoriteGifServiceTest extends TestCase
             'user_id' => '1'
         ];
 
-        $mock = Mockery::mock(FavoriteGifRepository::class);
+        $mockedFavoriteGifRepository = Mockery::mock(FavoriteGifRepository::class);
 
-        $mock->shouldReceive('exists')->andReturn(false);
-        $mock->shouldReceive('create')->once();
+        $mockedFavoriteGifRepository->shouldReceive('exists')->andReturn(false);
+        $mockedFavoriteGifRepository->shouldReceive('create')->once();
 
-        $this->favoriteGifRepository = $this->app->instance(FavoriteGifRepository::class, $mock);
-        $this->favoriteGifService = new FavoriteGifService($this->favoriteGifRepository);
+        $giphyServiceMock = Mockery::mock(GiphyAPIService::class);
+
+        $this->favoriteGifRepository = $this->app->instance(FavoriteGifRepository::class, $mockedFavoriteGifRepository);
+        $this->favoriteGifService = new FavoriteGifService($this->favoriteGifRepository, $giphyServiceMock);
 
         $this->favoriteGifService->create($parameters['gif_id'], $parameters['alias'], $parameters['user_id']);
     }
@@ -44,12 +47,40 @@ class FavoriteGifServiceTest extends TestCase
             'user_id' => '1'
         ];
 
-        $mock = Mockery::mock(FavoriteGifRepository::class);
+        $mockedFavoriteGifRepository = Mockery::mock(FavoriteGifRepository::class);
 
-        $mock->shouldReceive('exists')->andReturn(true);
+        $mockedFavoriteGifRepository->shouldReceive('exists')->andReturn(true);
 
-        $this->favoriteGifRepository = $this->app->instance(FavoriteGifRepository::class, $mock);
-        $this->favoriteGifService = new FavoriteGifService($this->favoriteGifRepository);
+        $giphyServiceMock = Mockery::mock(GiphyAPIService::class);
+
+        $this->favoriteGifRepository = $this->app->instance(FavoriteGifRepository::class, $mockedFavoriteGifRepository);
+        $this->favoriteGifService = new FavoriteGifService($this->favoriteGifRepository, $giphyServiceMock);
+
+        $this->expectException(\Exception::class);
+        $this->favoriteGifService->create($parameters['gif_id'], $parameters['alias'], $parameters['user_id']);
+    }
+
+    public function test_save_favorite_gif_should_throw_when_the_user_tries_to_save_a_gif_with_an_invalid_id(): void
+    {
+        $parameters = [
+            'gif_id' => 'invalid',
+            'alias' => 'test',
+            'user_id' => '1'
+        ];
+
+        $mockedFavoriteGifRepository = Mockery::mock(FavoriteGifRepository::class);
+        $mockedFavoriteGifRepository->shouldReceive('exists')->andReturn(false);
+
+        $giphyServiceMock = Mockery::mock(GiphyAPIService::class);
+        $giphyServiceMock->shouldReceive('searchById')
+            ->with($parameters['gif_id'])
+            ->once()
+            ->andReturn(null);
+
+        $this->app->instance(GiphyAPIService::class, $giphyServiceMock);
+        $this->app->instance(FavoriteGifRepository::class, $mockedFavoriteGifRepository);
+
+        $this->favoriteGifService = new FavoriteGifService($this->favoriteGifRepository, $giphyServiceMock);
 
         $this->expectException(\Exception::class);
         $this->favoriteGifService->create($parameters['gif_id'], $parameters['alias'], $parameters['user_id']);

@@ -9,10 +9,6 @@ use App\Http\Services\GiphyAPIService;
 
 class GiphyAPIServiceProvider extends ServiceProvider
 {
-    private $giphyAPIService;
-    private $giphyAPIAdapter;
-    private $giphyAPIController;
-
     /**
      * Register services.
      */
