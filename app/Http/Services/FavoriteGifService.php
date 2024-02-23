@@ -13,8 +13,8 @@ class FavoriteGifService
         $this->favoriteGifRepository = $favoriteGifRepository;
     }
 
-    public function save(int $id, string $alias, int $userId)
+    public function create(string $gifId, string $alias, int $userId)
     {
-        return $this->favoriteGifRepository->create($id, $alias, $userId);
+        return $this->favoriteGifRepository->create($gifId, $alias, $userId);
     }
 }

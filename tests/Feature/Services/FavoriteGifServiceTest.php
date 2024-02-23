@@ -23,6 +23,6 @@ class FavoriteGifServiceTest extends TestCase
         $this->favoriteGifRepository = $this->app->instance(FavoriteGifRepository::class, $mock);
         $this->favoriteGifService = new FavoriteGifService($this->favoriteGifRepository);
 
-        $this->favoriteGifService->save(1, 'test', 1);
+        $this->favoriteGifService->create(1, 'test', 1);
     }
 }
