@@ -32,6 +32,21 @@ class FavoriteGifServiceTest extends TestCase
         $mockedFavoriteGifRepository->shouldReceive('create')->once();
 
         $giphyServiceMock = Mockery::mock(GiphyAPIService::class);
+        $giphyServiceMock->shouldReceive('searchById')
+            ->once()
+            ->andReturn([
+                'data' => [
+                    'id' => '123',
+                    'url' => 'https://giphy.com/gifs/test',
+                    'images' => [
+                        'original' => [
+                            'url' => 'https://giphy.com/gifs/test'
+                        ]
+                    ]
+                ]
+            ]);
+
+        $this->app->instance(GiphyAPIService::class, $giphyServiceMock);
 
         $this->favoriteGifRepository = $this->app->instance(FavoriteGifRepository::class, $mockedFavoriteGifRepository);
         $this->favoriteGifService = new FavoriteGifService($this->favoriteGifRepository, $giphyServiceMock);
@@ -75,10 +90,10 @@ class FavoriteGifServiceTest extends TestCase
         $giphyServiceMock->shouldReceive('searchById')
             ->with($parameters['gif_id'])
             ->once()
-            ->andReturn(null);
+            ->andReturn([]);
 
         $this->app->instance(GiphyAPIService::class, $giphyServiceMock);
-        $this->app->instance(FavoriteGifRepository::class, $mockedFavoriteGifRepository);
+        $this->favoriteGifRepository = $this->app->instance(FavoriteGifRepository::class, $mockedFavoriteGifRepository);
 
         $this->favoriteGifService = new FavoriteGifService($this->favoriteGifRepository, $giphyServiceMock);
 

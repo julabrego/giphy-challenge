@@ -23,6 +23,10 @@ class FavoriteGifService
             throw new \Exception('The user has already saved the gif');
         }
 
+        if ($this->giphyAPIService->searchById($gifId) === []) {
+            throw new \Exception('Gif not found');
+        }
+
         return $this->favoriteGifRepository->create($gifId, $alias, $userId);
     }
 }
