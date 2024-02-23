@@ -16,15 +16,11 @@ class GiphyAPIController extends Controller
 
     public function search(Request $request)
     {
-        $response = $this->giphyAPIAdapter->search($request->q, $request->limit, $request->offset);
-
-        return $response;
+        return $this->giphyAPIAdapter->search($request->q, $request->limit, $request->offset);
     }
 
     public function searchById(string $id)
     {
-        $response = $this->giphyAPIAdapter->searchById($id);
-
-        return $response;
+        return $this->giphyAPIAdapter->searchById($id);
     }
 }

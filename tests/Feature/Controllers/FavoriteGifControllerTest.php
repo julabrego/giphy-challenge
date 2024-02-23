@@ -33,7 +33,7 @@ class FavoriteGifControllerTest extends TestCase
         $mock->shouldReceive('create')->once()->with($parameters['gif_id'], $parameters['alias'], $user->id)->andReturn($expectedFavoriteGif);
         $this->app->instance(FavoriteGifService::class, $mock);
 
-        $response = $this->actingAs($user)->post('/api/gifs/save-favorite-gif', $parameters);
+        $response = $this->actingAs($user, 'api')->post('/api/gifs/save-favorite-gif', $parameters);
 
         $response->assertStatus(200);
         $response->assertJson($expectedFavoriteGif->toArray());
