@@ -22,8 +22,8 @@ Route::post('/register', [AuthController::class, 'register'])->name("register");
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::prefix('gifs')->group(function () {
-    Route::get('/search', [GiphyAPIController::class, 'search'])->name('search');
-    Route::get('/search/{id}', [GiphyAPIController::class, 'searchById'])->name('searchById');
+    Route::get('/search', [GiphyAPIController::class, 'search'])->name('search')->middleware('auth:api');
+    Route::get('/search/{id}', [GiphyAPIController::class, 'searchById'])->name('searchById')->middleware('auth:api');
 
-    Route::post('/save-favorite-gif', [FavoriteGifController::class, 'save'])->name('saveFavoriteGif');
+    Route::post('/save-favorite-gif', [FavoriteGifController::class, 'save'])->name('saveFavoriteGif')->middleware('auth:api');
 });
