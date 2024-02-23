@@ -6,10 +6,13 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Http\Middleware\LogUserInteraction;
 
 class AuthLoginTest extends TestCase
 {
     use DatabaseTransactions;
+
+
 
     public function test_login_route_exists(): void
     {
@@ -86,7 +89,8 @@ class AuthLoginTest extends TestCase
 
     private function login($userData)
     {
-        return $this->post(route('login'), $userData);
+        return $this->withoutMiddleware(LogUserInteraction::class)
+            ->post(route('login'), $userData);
     }
 
     private function createTestUser()

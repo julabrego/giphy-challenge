@@ -21,7 +21,7 @@ class LogUserInteractionTest extends TestCase
         $this->actingAs($user);
 
         $requestData = [
-            'user_id' => $user->id,
+            'user' => $user,
             'service_name' => 'service_name',
             'request_body' => ['message' => 'request_body'],
             'query_params' => 'query_params',
@@ -41,6 +41,9 @@ class LogUserInteractionTest extends TestCase
 
         $logUserInteraction = new LogUserInteraction();
 
+        $request->setUserResolver(function () use ($user) {
+            return $user;
+        });
         $logUserInteraction->terminate($request, $response);
 
         $this->assertDatabaseHas('user_interactions', [

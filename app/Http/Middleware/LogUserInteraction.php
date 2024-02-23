@@ -17,7 +17,6 @@ class LogUserInteraction
     public function handle(Request $request, Closure $next): Response
     {
         $processedRequestData = [
-            'user_id' => $request->user()->id ?? null,
             'service_name' => $request->route()->getName(),
             'request_body' => $request->getContent(),
             'query_params' => $request->query(),
@@ -34,7 +33,7 @@ class LogUserInteraction
         $processedRequestData = $request->attributes->get('processedRequestData');
 
         $userInteraction = new UserInteraction();
-        $userInteraction->user_id = $processedRequestData['user_id'];
+        $userInteraction->user_id = $request->user()->id;
         $userInteraction->service_name = $processedRequestData['service_name'];
         $userInteraction->request_body = $processedRequestData['request_body'];
         $userInteraction->query_params = $processedRequestData['query_params'];

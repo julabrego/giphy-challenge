@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use App\Http\Middleware\LogUserInteraction;
 
 class AuthRegisterTest extends TestCase
 {
@@ -85,6 +86,7 @@ class AuthRegisterTest extends TestCase
 
     private function registerUser($userData)
     {
-        return $this->post(route('register'), $userData);
+        return $this->withoutMiddleware(LogUserInteraction::class)
+            ->post(route('register'), $userData);
     }
 }
