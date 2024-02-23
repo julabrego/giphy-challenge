@@ -12,7 +12,7 @@ class FavoriteGifRepository
         $this->favoriteGif = $favoriteGif;
     }
 
-    public function create(string $gifId, string $alias, int $userId)
+    public function create(string $gifId, string $alias, int $userId): FavoriteGif
     {
         return $this->favoriteGif->create([
             'gif_id' => $gifId,
