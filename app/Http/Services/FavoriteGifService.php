@@ -20,11 +20,11 @@ class FavoriteGifService
     public function create(string $gifId, string $alias, int $userId): FavoriteGif
     {
         if ($this->favoriteGifRepository->exists($gifId, $userId)) {
-            throw new \Exception('The user has already saved the gif');
+            throw new \Exception('The user has already saved the gif', 409);
         }
 
-        if ($this->giphyAPIService->searchById($gifId) === []) {
-            throw new \Exception('Gif not found');
+        if (empty($this->giphyAPIService->searchById($gifId)['data'])) {
+            throw new \Exception('Gif not found', 404);
         }
 
         return $this->favoriteGifRepository->create($gifId, $alias, $userId);

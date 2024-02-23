@@ -22,17 +22,14 @@ class GiphyAPIAdapter implements GiphyAPIAdapterInterface
 
     public function searchById(string $id)
     {
-        try {
-            $result = $this->giphyAPIService->searchById($id);
 
-            if (empty($result['data'])) {
-                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('GIF not found.', 404);
-            }
+        $result = $this->giphyAPIService->searchById($id);
 
-            return $this->adapt($result['data']);
-        } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        if (empty($result['data'])) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException('GIF not found.', 404);
         }
+
+        return $this->adapt($result['data']);
     }
 
     protected function adaptSearchResponse(array $apiResponse): array

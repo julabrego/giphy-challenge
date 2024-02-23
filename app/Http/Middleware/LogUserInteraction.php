@@ -18,7 +18,7 @@ class LogUserInteraction
     {
         $processedRequestData = [
             'service_name' => $request->route()->getName(),
-            'request_body' => $request->getContent(),
+            'request_body' => $this->fillRequestBodyWithCorrespondingData($request),
             'query_params' => $request->query(),
             'source_ip' => $request->ip(),
         ];
@@ -42,5 +42,10 @@ class LogUserInteraction
         $userInteraction->source_ip = $processedRequestData['source_ip'];
 
         $userInteraction->save();
+    }
+
+    private function fillRequestBodyWithCorrespondingData($request)
+    {
+        return $request->route()->hasParameter('id') ? ['id' => $request->route('id')] : $request->getContent();
     }
 }

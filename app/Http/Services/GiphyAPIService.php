@@ -2,10 +2,10 @@
 
 namespace App\Http\Services;
 
-use App\Http\Adapters\GiphyApiAdapterInterface;
+use App\Http\Adapters\GiphyAPIAdapterInterface;
 use Illuminate\Support\Facades\Http;
 
-class GiphyAPIService implements GiphyApiAdapterInterface
+class GiphyAPIService implements GiphyAPIAdapterInterface
 {
     private $baseUrl;
     private $apiKey;

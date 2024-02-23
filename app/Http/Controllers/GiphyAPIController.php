@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Adapters\GiphyAPIAdapter;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class GiphyAPIController extends Controller
 {
@@ -16,11 +17,19 @@ class GiphyAPIController extends Controller
 
     public function search(Request $request)
     {
-        return $this->giphyAPIAdapter->search($request->q, $request->limit, $request->offset);
+        try {
+            return $this->giphyAPIAdapter->search($request->q, $request->limit, $request->offset);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function searchById(string $id)
     {
-        return $this->giphyAPIAdapter->searchById($id);
+        try {
+            return $this->giphyAPIAdapter->searchById($id);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 }

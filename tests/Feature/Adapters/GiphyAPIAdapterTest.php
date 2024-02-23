@@ -66,18 +66,6 @@ class GiphyAPIAdapterTest extends TestCase
         $this->assertInstanceOf(GifDTO::class, $response);
     }
 
-    public function test_adapter_should_adapt_the_response_of_the_search_by_id_method_with_empty_response(): void
-    {
-        $id = '1234';
-
-        $this->mockHTTPGiphyEmptySearchByIdRequest($id);
-
-        $response = $this->giphyAPIAdapter->searchById($id);
-
-        $this->assertEquals(404, $response->status());
-    }
-
-
     private function getExampleAPIResponse()
     {
         $fileContents = file_get_contents(base_path() . '/tests/Feature/MockAPIResponses/GiphyAPIResponse.json');

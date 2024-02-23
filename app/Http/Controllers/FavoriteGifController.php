@@ -16,8 +16,12 @@ class FavoriteGifController extends Controller
         $this->favoriteGifService = $favoriteGifService;
     }
 
-    public function save(Request $request): FavoriteGif
+    public function save(Request $request): FavoriteGif | \Illuminate\Http\JsonResponse
     {
-        return $this->favoriteGifService->create($request->input('gif_id'), $request->input('alias'), Auth::user()->id);
+        try {
+            return $this->favoriteGifService->create($request->input('gif_id'), $request->input('alias'), Auth::user()->id);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode());
+        }
     }
 }
