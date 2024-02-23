@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\FavoriteGifController;
 use App\Http\Controllers\GiphyAPIController;
+use App\Http\Middleware\LogUserInteraction;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,13 +18,13 @@ use App\Http\Controllers\GiphyAPIController;
 |
 */
 
-Route::post('/register', [AuthController::class, 'register'])->name("register");
+Route::post('/register', [AuthController::class, 'register'])->name("register")->middleware(LogUserInteraction::class);
 
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login')->middleware(LogUserInteraction::class);
 
 Route::prefix('gifs')->group(function () {
-    Route::get('/search', [GiphyAPIController::class, 'search'])->name('search')->middleware('auth:api');
-    Route::get('/search/{id}', [GiphyAPIController::class, 'searchById'])->name('searchById')->middleware('auth:api');
+    Route::get('/search', [GiphyAPIController::class, 'search'])->name('search')->middleware('auth:api')->middleware(LogUserInteraction::class);
+    Route::get('/search/{id}', [GiphyAPIController::class, 'searchById'])->name('searchById')->middleware('auth:api')->middleware(LogUserInteraction::class);
 
-    Route::post('/save-favorite-gif', [FavoriteGifController::class, 'save'])->name('saveFavoriteGif')->middleware('auth:api');
+    Route::post('/save-favorite-gif', [FavoriteGifController::class, 'save'])->name('saveFavoriteGif')->middleware('auth:api')->middleware(LogUserInteraction::class);
 });

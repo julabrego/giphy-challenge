@@ -13,8 +13,15 @@ class UserInteraction extends Model
         'user_id',
         'service_name',
         'request_body',
+        'query_params',
         'response_code',
         'response_body',
         'source_ip',
+    ];
+
+    protected $casts = [
+        'request_body' => 'json',
+        'query_params' => 'json',
+        'response_body' => 'json',
     ];
 }

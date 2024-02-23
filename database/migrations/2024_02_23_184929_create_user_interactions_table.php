@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('user_interactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->nullable();
             $table->string('service_name');
-            $table->string('request_body');
+            $table->json('request_body');
+            $table->json('query_params');
             $table->unsignedInteger('response_code');
-            $table->string('response_body');
+            $table->json('response_body');
             $table->string('source_ip');
             $table->timestamps();
         });
