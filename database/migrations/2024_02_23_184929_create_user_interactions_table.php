@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_interactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained();;
             $table->string('service_name');
             $table->json('request_body');
             $table->json('query_params');
