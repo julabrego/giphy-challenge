@@ -59,6 +59,5 @@ php artisan serve
 ![DER](https://github.com/julabrego/giphy-challenge/assets/39074716/1de5c505-5349-4d7b-9824-c67a2b9a1d9f)
 
 ## Postman collection
-
-You can import [this collection](https://github.com/matiassingers/awesome-readme) to your Postman and start playing with the services directly in your computer.
+You can import [this collection](https://github.com/julabrego/giphy-challenge/blob/main/giphy_api_integration_challenge.postman_collection.json) to your Postman and start playing with the services directly in your computer.
 
