@@ -32,42 +32,33 @@ php artisan serve
 
 ### Use cases
 
-#### Register user
-![Register user](relative%20path/to/img.jpg?raw=true "Register User Use case")
+#### User authentication
+![image](https://github.com/julabrego/giphy-challenge/assets/39074716/352cb8df-75e8-41ad-83aa-9ad5cab6d1e4)
 
-#### Login user
-![Login user](relative%20path/to/img.jpg?raw=true "Login User Use case")
-
-#### Search gifs
-![Search gifs](relative%20path/to/img.jpg?raw=true "Search gifs Use case")
-
-#### Search gif by id
-![Search gif by id](relative%20path/to/img.jpg?raw=true "Search gif by id Use case")
-
-#### Save favorite gif
-![Save favorite gif](relative%20path/to/img.jpg?raw=true "Save favorite gif Use case")
+#### Use cases with gifs
+![image](https://github.com/julabrego/giphy-challenge/assets/39074716/7025fbf2-e7f1-49e3-8070-1f501e016546)
 
 ### Sequence diagrams
 
 #### Register user
-![Register user](relative%20path/to/img.jpg?raw=true "Register User sequence diagram")
+![Register](https://github.com/julabrego/giphy-challenge/assets/39074716/c46397a7-be0e-417a-a46f-05f29990713e)
 
 #### Login user
-![Login user](relative%20path/to/img.jpg?raw=true "Login User sequence diagram")
+![Login](https://github.com/julabrego/giphy-challenge/assets/39074716/83ce4bb9-8904-4f14-9bd2-fe1e33387d1d)
 
 #### Search gifs
-![Search gifs](relative%20path/to/img.jpg?raw=true "Search gifs sequence diagram")
+![Search](https://github.com/julabrego/giphy-challenge/assets/39074716/a00217dc-0e6c-4427-b888-83f19534d4dc)
 
 #### Search gif by id
-![Search gif by id](relative%20path/to/img.jpg?raw=true "Search gif by id sequence diagram")
+![SearchGifById](https://github.com/julabrego/giphy-challenge/assets/39074716/013136d7-f6aa-4d63-8fb5-5f31a94ea3a6)
 
 #### Save favorite gif
-![Save favorite gif](relative%20path/to/img.jpg?raw=true "Save favorite gif sequence diagram")
+![SaveFavoriteGif](https://github.com/julabrego/giphy-challenge/assets/39074716/d5e34b2f-c742-44b2-8467-4482e9b26573)
 
 ### ERD
+![DER](https://github.com/julabrego/giphy-challenge/assets/39074716/1de5c505-5349-4d7b-9824-c67a2b9a1d9f)
 
-![ERD](relative%20path/to/img.jpg?raw=true "Entity relationships diagram")
 ## Postman collection
 
-You can import this [Postman collection](https://github.com/matiassingers/awesome-readme) to play with the services directly in your computer.
+You can import [this collection](https://github.com/matiassingers/awesome-readme) to your Postman and start playing with the services directly in your computer.
 
