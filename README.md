@@ -26,7 +26,7 @@ Laravel application which provides an API REST of services that integrates with 
 ```bash
 cp .env.example .env
 ```
-3) Edit the `.env` file and fill the `DB_USERNAME` and `DB_PASSWORD` with your desired values. Also, you'll have to fill the `GIPHY_API_KEY` with a valid one.
+3) Edit the new `.env` fil and fill the `GIPHY_API_KEY` with a valid value.
 4) Create the Docker image for the project.
 ```bash
 docker-compose build
