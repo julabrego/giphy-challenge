@@ -56,7 +56,8 @@
 								"api",
 								"register"
 							]
-						}
+						},
+						"description": "This endpoint allows users to register by sending a POST request to the specified URL.\n\n### Request Body\n\n- `name` (string, required): The name of the user.\n- `email` (string, required): The email address of the user.\n- `password` (string, required): The password for the user account.\n    \n\n### Response\n\nUpon successful registration, the server responds with a status code of 200 and a JSON object containing the user's details and an access token.\n\n- `user` (object): Details of the registered user, including their name, email, update and creation timestamps, and user ID.\n- `access_token` (object): Contains the access token and its expiration time in seconds.\n    \n\nExample:\n\n``` json\n{\n    \"user\": {\n        \"name\": \"Somebody\",\n        \"email\": \"somebody@email.com\",\n        \"updated_at\": \"2024-02-26T14:20:36.000000Z\",\n        \"created_at\": \"2024-02-26T14:20:36.000000Z\",\n        \"id\": 500\n    },\n    \"access_token\": {\n        \"token\": \"someRandomValues.123.abc\",\n        \"expires_in\": 29\n    }\n}\n\n ```"
 					},
 					"response": []
 				},
@@ -115,7 +116,8 @@
 								"api",
 								"login"
 							]
-						}
+						},
+						"description": "### Login API\n\nThis API endpoint allows users to log in and obtain an access token for authentication.\n\n#### Request body\n\n- Method: POST\n- URL: `http://localhost:8000/api/login`\n- Body (x-www-form-urlencoded):\n    - `email` (text, required): The email address of the user.\n    - `password` (text, required): The password of the user.\n\n#### Response\n\n- Status: 200\n- Content-Type: application/json\n    \n\n``` json\n{\n  \"user\": {\n    \"id\": 500,\n    \"name\": \"Somebody\",\n    \"email\": \"somebody@email.com\",\n    \"email_verified_at\": null,\n    \"created_at\": \"2024-02-26T14:20:36.000000Z\",\n    \"updated_at\": \"2024-02-26T14:20:36.000000Z\"\n  },\n  \"access_token\": { \"token\": \"aRandomValue.123.abc\", \"expires_in\": 29 }\n}\n\n\n ```\n\nUpon successful login, the API returns the user details and an access token with its expiration time."
 					},
 					"response": []
 				}
@@ -165,7 +167,8 @@
 									"value": "10"
 								}
 							]
-						}
+						},
+						"description": "This endpoint makes an HTTP GET request to search for GIFs based on the provided query parameters. The 'q' parameter is used to specify the search query, 'limit' parameter is used to define the maximum number of GIFs to be returned, and 'offset' parameter is used to specify the starting position for the GIFs to be returned.\n\n### Request Parameters\n\n- q (string, required): The search query for GIFs.\n- limit (integer, optional): The maximum number of GIFs to be returned.\n    \n- offset (integer, optional): The starting position for the GIFs to be returned.\n    \n\n### Response\n\nUpon a successful request, the server responds with a status code of 200 and a JSON array containing objects with the following properties:\n\n- id (string): The unique identifier of the GIF.\n- url (string): The URL of the GIF.\n- title (string): The title of the GIF."
 					},
 					"response": []
 				},
@@ -185,7 +188,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8000/api/gifs/search/u8CAYrGqrDjzgd77nP",
+							"raw": "http://localhost:8000/api/gifs/search/:id",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -195,9 +198,16 @@
 								"api",
 								"gifs",
 								"search",
-								"u8CAYrGqrDjzgd77nP"
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "u8CAYrGqrDjzgd77nP"
+								}
 							]
-						}
+						},
+						"description": "# GIF Search by ID\n\nThis endpoint allows you to retrieve a GIF by its unique ID.\n\n## Request\n\n### Request URL\n\n``` http\nGET http://localhost:8000/api/gifs/search/:id\n\n ```\n\n### Path Parameters\n\n- `id` (string, required): The unique ID of the GIF to be retrieved.\n    \n\n## Response\n\n- Status: 200 OK\n- Content-Type: application/json\n    \n\n### Response Body\n\nThe response will contain the details of the GIF with the specified ID:\n\n- `id` (string): The unique ID of the GIF.\n- `url` (string): The URL of the GIF.\n- `title` (string): The title of the GIF."
 					},
 					"response": []
 				},
@@ -243,7 +253,8 @@
 								"gifs",
 								"save-favorite-gif"
 							]
-						}
+						},
+						"description": "This endpoint allows users to save a favorite GIF by making an HTTP POST request to the specified URL. The request should have a payload with the request body type containing the 'gif_id' and 'alias' parameters.\n\n### Request Body\n\n- gif_id (text, required): The ID of the GIF to be saved as a favorite.\n    \n- alias (text, required): An alias or nickname for the saved GIF.\n    \n\n### Response\n\nUpon a successful execution, the API returns a 201 status code and a JSON response with the saved GIF details, including the 'gif_id', 'alias', 'user_id', 'updated_at', 'created_at', and 'id' parameters.\n\nExample:\n\n``` json\n{\n    \"gif_id\": \"example_gif_id\",\n    \"alias\": \"favorite_gif_alias\",\n    \"user_id\": 123,\n    \"updated_at\": \"2022-01-01T12:00:00Z\",\n    \"created_at\": \"2022-01-01T12:00:00Z\",\n    \"id\": 456\n}\n\n ```"
 					},
 					"response": []
 				}
