@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 services:
   app:
     build:
@@ -16,16 +16,17 @@ services:
     networks:
       - app_network
   db:
-    image: mysql:8
+    image: mysql
     container_name: prex_challenge_db
-    restart: unless-stopped
+    ports:
+      - 3306:3306
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     volumes:
-      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+      - ./docker-compose/mysql:/var/lib/mysql
     networks:
       - app_network
   nginx:
