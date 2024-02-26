@@ -26,37 +26,58 @@ docker exec prex_challenge_app php artisan key:generate
 docker exec prex_challenge_app php artisan migrate
 docker exec prex_challenge_app php artisan passport:install
 ```
-7) At this time, your application should be fully operational. You can now import [this collection](https://github.com/julabrego/giphy-challenge/blob/main/giphy_api_integration_challenge.postman_collection.json) to your Postman (or your favorite HTTP client) and begin playing with the services directly in your computer.
+7) At this time, your application should be fully operational. You can check the [API Reference](#api-reference) or import [this collection](https://github.com/julabrego/giphy-challenge/blob/main/giphy_api_integration_challenge.postman_collection.json) to your Postman (or your favorite HTTP client) and begin playing with the services directly in your computer.
+
+## Testing
+You can run the complete test suite with this command
+```bash
+docker exec prex_challenge_app php artisan test
 ```
-php artisan serve
-```
 
-## Documentation
+## Use cases
 
-### Use cases
-
-#### User authentication
+### User authentication
 ![image](https://github.com/julabrego/giphy-challenge/assets/39074716/352cb8df-75e8-41ad-83aa-9ad5cab6d1e4)
 
-#### Use cases with gifs
+### Use cases with gifs
 ![image](https://github.com/julabrego/giphy-challenge/assets/39074716/7025fbf2-e7f1-49e3-8070-1f501e016546)
 
-### Sequence diagrams
+## Sequence diagrams
 
-#### Register user
-![Register](https://github.com/julabrego/giphy-challenge/assets/39074716/c46397a7-be0e-417a-a46f-05f29990713e)
+In the following images you can check with more details how the system handles the previously mentioned use cases.
 
-#### Login user
+### Login user*
+*This diagram includes the details of the User Interaction Logging middleware. All the remaining diagrams just hide it. 
+
 ![Login](https://github.com/julabrego/giphy-challenge/assets/39074716/83ce4bb9-8904-4f14-9bd2-fe1e33387d1d)
 
-#### Search gifs
+### Register user
+![Register](https://github.com/julabrego/giphy-challenge/assets/39074716/c46397a7-be0e-417a-a46f-05f29990713e)
+
+### Search gifs
 ![Search](https://github.com/julabrego/giphy-challenge/assets/39074716/a00217dc-0e6c-4427-b888-83f19534d4dc)
 
-#### Search gif by id
+### Search gif by id
 ![SearchGifById](https://github.com/julabrego/giphy-challenge/assets/39074716/013136d7-f6aa-4d63-8fb5-5f31a94ea3a6)
 
-#### Save favorite gif
+### Save favorite gif
 ![SaveFavoriteGif](https://github.com/julabrego/giphy-challenge/assets/39074716/d5e34b2f-c742-44b2-8467-4482e9b26573)
 
-### ERD
+## ERD
+Here is a tiny diagram showing the relationships between the domain entities.
+
 ![DER](https://github.com/julabrego/giphy-challenge/assets/39074716/1de5c505-5349-4d7b-9824-c67a2b9a1d9f)
+
+## API Reference
+
+The API endpoints are structured as follows:
+
+- `/auth/register`: Register a new user
+- `/auth/login`: Authenticate a user and retrieve a token
+- `/gifs/search`: Search for gifs with a query term
+- `/gifs/{id}`: Retrieve a specific gif by its ID
+- `/favorites`: Get all favorite gifs for the authenticated user
+- `/favorites`: (POST) Save a gif as favorite
+- `/favorites/{gif_id}`: (DELETE) Remove a gif from favorites
+
+For more details on request and response formats, please import [this collection](https://github.com/julabrego/giphy-challenge/blob/main/giphy_api_integration_challenge.postman_collection.json) to Postman or your favorite HTTP Client software.
