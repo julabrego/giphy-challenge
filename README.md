@@ -5,7 +5,7 @@ Laravel application which provides an API REST of services that integrates with 
 
 ## Installation
 
-1) Clone this repository
+1) Clone this repository and enter to its directory
 2) Create a `.env` file from `.env.example` file
 ```bash
 cp .env.example .env
@@ -13,13 +13,13 @@ cp .env.example .env
 3) Most of the environment variables default values defined in the `.env` will work well for development, but for this example you'll need a valid `GIPHY_API_KEY`.
 4) Create the Docker image for the project
 ```bash
-docker-compose build app
+docker-compose build
 ```
 5) Once the image is created, you'll be able to run the project from Docker
 ```bash
 docker-compose up -d
 ```
-6) The first time you run it, you'll have to run the database migrations and generate the Passport's encryption keys to properly generate the access tokens
+6) The first time you run it, you'll have to run the database migrations and generate the Passport's encryption keys to properly generate the access tokens. Wait until the `prex_challenge_db` container completely initiates its mysql services and then run:
 ```bash
 docker exec prex_challenge_app php artisan migrate
 docker exec prex_challenge_app php artisan passport:install
