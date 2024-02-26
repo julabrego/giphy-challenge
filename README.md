@@ -10,7 +10,7 @@ Laravel application which provides an API REST of services that integrates with 
 ```bash
 cp .env.example .env
 ```
-3) Most of the environment variables default values defined in the `.env` will work well for development, but for this example you'll need a valid `GIPHY_API_KEY`.
+3) Edit the `.env` file and fill the `DB_USERNAME` and `DB_PASSWORD` with your desired values. Also, you'll have to fill the `GIPHY_API_KEY` with a valid one.
 4) Create the Docker image for the project
 ```bash
 docker-compose build
@@ -19,12 +19,14 @@ docker-compose build
 ```bash
 docker-compose up -d
 ```
-6) The first time you run it, you'll have to run the database migrations and generate the Passport's encryption keys to properly generate the access tokens. Wait until the `prex_challenge_db` container completely initiates its mysql services and then run:
+6) The first time you run the application, you'll have to do some initial setup: install the project's dependencies, generate the application key, run the database migrations and generate the Passport's encryption keys to properly generate the access tokens:
 ```bash
+docker exec prex_challenge_app composer install
+docker exec prex_challenge_app php artisan key:generate
 docker exec prex_challenge_app php artisan migrate
 docker exec prex_challenge_app php artisan passport:install
 ```
-7) Have fun!
+7) At this time, your application should be fully operational. You can now import [this collection](https://github.com/julabrego/giphy-challenge/blob/main/giphy_api_integration_challenge.postman_collection.json) to your Postman (or your favorite HTTP client) and begin playing with the services directly in your computer.
 ```
 php artisan serve
 ```
@@ -58,8 +60,3 @@ php artisan serve
 
 ### ERD
 ![DER](https://github.com/julabrego/giphy-challenge/assets/39074716/1de5c505-5349-4d7b-9824-c67a2b9a1d9f)
-
-## Postman collection
-
-You can import [this collection](https://github.com/matiassingers/awesome-readme) to your Postman and start playing with the services directly in your computer.
-
